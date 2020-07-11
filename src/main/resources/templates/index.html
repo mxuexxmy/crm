@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include/include :: header('CRM管理系统')"/>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header" >
+        <div class="layui-logo">CRM系统</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;" >
+                    <img th:src="@{image/user1-128x128.jpg}" class="layui-nav-img">
+                    [[${session.user.name}]]
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="javascript:;">基本资料</a></dd>
+                    <dd><a href="javascript:;">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a th:href="@{logout}">退出</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black" th:fragment="nav">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">客户管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;">客户基本信息</a></dd>
+                        <dd><a href="javascript:;">客户联系人</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">营销管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;">销售机会</a></dd>
+                        <dd><a href="javascript:;">发展客户</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">统计报表</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;">按区域统计客户数量</a></dd>
+                        <dd><a href="javascript:;">客户联系人</a></dd>
+                        <dd><a href="javascript:;">客户流失管理</a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <iframe name="content_iFrm" frameborder="no" border="0" content="layry_ifram" style="width: 100%; width: 100%" src="/customer/customerlist"></iframe>
+    </div>
+
+    <div class="layui-footer center-pill" >
+        <!-- 底部固定区域 -->
+        © 17软件  龙 兴 倾情创作
+    </div>
+</div>
+
+<th:block  th:include="include/include :: footer"/>
+
+<script>
+    //JavaScript代码区域
+    layui.use('element', function(){
+        var element = layui.element;
+
+    });
+</script>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?d214947968792b839fd669a4decaaffc";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+</body>
+</html>
