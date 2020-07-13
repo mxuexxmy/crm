@@ -16,4 +16,9 @@ public class IndexController {
         return "index";
     }
 
+    @RequestMapping(value = "indexcontent", method = RequestMethod.GET)
+    public String indexContent() {
+        return "indexcontent";
+    }
+
 }

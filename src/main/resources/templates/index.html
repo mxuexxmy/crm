@@ -31,7 +31,7 @@
                 <li class="layui-nav-item layui-nav-itemed">
                     <a class="" href="javascript:;">客户管理</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;">客户基本信息</a></dd>
+                        <dd><a th:href="@{/customer/list}" target="content_iFrm">客户基本信息</a></dd>
                         <dd><a href="javascript:;">客户联系人</a></dd>
                     </dl>
                 </li>
@@ -57,7 +57,7 @@
 
     <div class="layui-body">
         <!-- 内容主体区域 -->
-        <iframe name="content_iFrm" frameborder="no" border="0" content="layry_ifram" style="width: 100%; width: 100%" src="/customer/customerlist"></iframe>
+        <iframe name="content_iFrm" frameborder="no" border="0" content="layry_ifram" style="width: 100%; height: 100%" src="/indexcontent"></iframe>
     </div>
 
     <div class="layui-footer center-pill" >
@@ -75,14 +75,6 @@
 
     });
 </script>
-<script>
-    var _hmt = _hmt || [];
-    (function() {
-        var hm = document.createElement("script");
-        hm.src = "https://hm.baidu.com/hm.js?d214947968792b839fd669a4decaaffc";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-    })();
-</script>
+
 </body>
 </html>
