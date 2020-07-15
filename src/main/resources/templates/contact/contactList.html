@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}"  media="all">
+    <script th:src="@{/layui/layui.js}" charset="utf-8"></script>
+</head>
+<body>
+<br>
+<form class="layui-form" action="">
+    <div class="layui-form-item">
+
+        <div class="layui-inline">
+            <label class="layui-form-label">客户姓名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="cusNo" id="cusNo" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <button type="button" id="search" class="layui-btn">搜索</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<table class="layui-hide" id="contact" lay-filter="contact"></table>
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="add">添加联系人</button>
+    </div>
+</script>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script type="text/html" id="barDetail">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+</script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+
+<script>
+    var row = null
+    var layer = null;
+    var table = null;
+
+    layui.use(['layer','table','jquery'], function(){
+
+        table = layui.table;
+        var  $ = layui.jquery;
+        layer = layui.layer;
+
+        table.render({
+            elem: '#contact'
+            ,url:'/contact/listJson'
+            ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+            ,title: '用户联系表'
+            ,cols: [
+                [
+                    {type: 'checkbox', fixed: 'left'}
+                    ,{field:'ctId', title:'联系人编号', width:100}
+                    ,{fixed: 'right',title: '客户详情',width:100,  toolbar: '#barDetail'}
+                    ,{field:'ctName', title:'姓名',width:120}
+                    ,{field:'ctGender', title:'性别', width:120,
+                     templet:function (row) {
+                       switch (row.ctGender) {
+                           case 0:
+                               return '女'
+                               break;
+                           case 1:
+                               return '男'
+                               break;
+                           default:
+                               return row.ctGender;
+                               break;
+                       }
+                    }
+                     }
+                    ,{field:'ctPhone', title:'联系电话', width:120}
+                    ,{field:'ctTitle', title:'职位', width: 120}
+                    ,{field:'ctNotes', title:'备注'}
+                    ,{fixed: 'right', title: '操作',width: 165, align:'center', toolbar: '#barDemo'}
+                ]
+            ]
+            ,page: true
+        });
+
+        //监听行工具事件
+        table.on('tool(contact)', function(obj){
+            var cusNo = obj.data.cusNo;
+
+            if(obj.event === 'del'){
+                layer.confirm('确认删除客户信息？', function(index){
+                    obj.del();
+                    layer.close(index);
+                    $.ajax({
+                        url: "/customer/delete?cusNo=" + cusNo,
+                        type: 'get',
+                    });
+
+                });
+            } else if(obj.event === 'edit'){
+                layer.open({
+                    type: 2,
+                    title:"客户修改",
+                    content:'/customer/update?cusNo=' + cusNo,
+                    area:['500px', '400px']
+                });
+            } else if (obj.event === 'detail') {
+                var cusNo = obj.data.cusNo;
+                layer.open({
+                    type: 2,
+                    title:"客户详情",
+                    content:'/customer/detail?cusNo=' + cusNo,
+                    area:['500px', '400px']
+                });
+            }
+        });
+
+    });
+
+
+</script>
+
+</body>
+</html>

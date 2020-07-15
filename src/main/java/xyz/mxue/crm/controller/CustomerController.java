@@ -43,9 +43,9 @@ public class CustomerController {
         CRUDResult result = new CRUDResult();
         result.setSuccess(0);
         if (customerService.saveCustomer(customer)) {
-           result.setMeg("添加客户成功");
+           result.setMsg("添加客户成功");
         } else {
-           result.setMeg("添加客户失败");
+           result.setMsg("添加客户失败");
         }
        return result;
     }
@@ -58,10 +58,30 @@ public class CustomerController {
         return "";
     }
 
-    public String updateCustomer() {
-        return "customr/";
+    /**
+     * 跳转修改页面
+     * @param cusNo
+     * @return
+     */
+    @RequestMapping(value = "update", method = RequestMethod.GET)
+    public String updateCustomer(ModelMap map,int cusNo) {
+        map.addAttribute("customer", customerService.getCustomerOne(cusNo));
+        return "customer/customerUpdate";
     }
 
+    @RequestMapping(value = "saveUpdate", method = RequestMethod.POST)
+    @ResponseBody
+    public CRUDResult saveUpdateCustomer(Customer customer) {
+        CRUDResult result = new CRUDResult();
+        if ( customerService.saveUpdateCustomer(customer)) {
+            result.setSuccess(0);
+            result.setMsg("修改客户成功");
+        } else {
+            result.setSuccess(0);
+            result.setMsg("修改客户失败");
+        }
+        return result;
+    }
     /**
      * 客户详情
      * @param map
@@ -69,7 +89,12 @@ public class CustomerController {
      */
     @RequestMapping(value = "detail", method = RequestMethod.GET)
     public String customerDetail(ModelMap map,int cusNo) {
-        map.addAttribute("customer", customerService.customerDetail(cusNo));
+        Customer customer = customerService.customerDetail(cusNo);
+        if (customer == null) {
+            map.addAttribute("customer", new Customer());
+        } else {
+            map.addAttribute("customer", customer);
+        }
         return "customer/customerDetail";
     }
 
@@ -79,8 +104,8 @@ public class CustomerController {
      */
     @ResponseBody
     @RequestMapping(value = "listJson", method = RequestMethod.GET)
-    public PageResult<Customer> listJson(int page, int limit) {
-        return  customerService.findPageResult(page, limit);
+    public PageResult<Customer> listJson(Customer customer,int page, int limit) {
+        return  customerService.findPageResult(customer, page, limit);
     }
 
 }

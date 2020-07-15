@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class CRUDResult {
     private Integer success;
-    private String meg;
+    private String msg;
 }

@@ -5,9 +5,11 @@ import org.springframework.stereotype.Service;
 import xyz.mxue.crm.entity.Customer;
 import xyz.mxue.crm.mapper.CustomerMapper;
 import xyz.mxue.crm.model.PageResult;
+import xyz.mxue.crm.model.ReportResult;
 import xyz.mxue.crm.service.CustomerService;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -17,14 +19,23 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerMapper customerMapper;
 
     @Override
-    public PageResult<Customer> findPageResult(int page, int limit) {
+    public PageResult<Customer> findPageResult(Customer customer, int page, int limit) {
         PageResult<Customer> result = new PageResult<>();
         result.setCode(0);
         result.setMsg("");
         Map<String , Object> map = new HashMap<>();
+
+        if(String.valueOf(customer.getCusNo())==""){
+            customer.setCusNo(null);
+        }
+        if(customer.getCusName()==""){
+            customer.setCusName(null);
+        }
+
         map.put("start", (page - 1) * limit);
         map.put("limit", limit);
-        result.setCount(customerMapper.findCount());
+        map.put("customer", customer);
+        result.setCount(customerMapper.findCount(map));
         result.setData(customerMapper.findCustomer(map));
         return result;
     }
@@ -53,6 +64,24 @@ public class CustomerServiceImpl implements CustomerService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Customer getCustomerOne(int cusNo) {
+        return customerMapper.customerDetail(cusNo);
+    }
+
+    @Override
+    public Boolean saveUpdateCustomer(Customer customer) {
+        if (customerMapper.saveUpdateCustomer(customer) > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public List<ReportResult> countCustomerReport() {
+        return customerMapper.countCustomerReport();
     }
 
 }

@@ -2,7 +2,6 @@ package xyz.mxue.crm.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -41,6 +40,25 @@ public class LoginController {
         }
         request.getSession().setAttribute(ContantUtils.SESSION_USER, user);
         return "redirect:/index";
+    }
+
+    /**
+     * 验证邮箱
+     * @return
+     */
+    @RequestMapping(value = "forget",method = RequestMethod.GET)
+    public String forgetFirst() {
+        return "forgetfirst";
+    }
+
+    /**
+     * 重置密码
+     * @param map
+     * @return
+     */
+    @RequestMapping(value = "reset", method = RequestMethod.POST)
+    public String forgetSecond(ModelMap map) {
+      return "forgetsecond";
     }
 
     /**

@@ -1,10 +1,8 @@
 package xyz.mxue.crm.mapper;
 
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import xyz.mxue.crm.entity.Customer;
+import xyz.mxue.crm.model.ReportResult;
 
 import java.util.List;
 import java.util.Map;
@@ -15,15 +13,28 @@ public interface CustomerMapper {
      * 查询数据条数
      * @return
      */
-    @Select("select count(*) from customer")
-    int findCount();
+    @Select({"<script>" +
+            "select count(*) from customer" +
+            "<if test='customer.cusNo != null'>where cus_no like concat('%',#{customer.cusNo},'%') </if>" +
+            "<if test='customer.cusNo != null and customer.cusName != null'>and</if>" +
+            "<if test='customer.cusNo == null and customer.cusName!=null'>where</if>" +
+            "<if test='customer.cusName != null'>cus_name like concat('%',#{customer.cusName},'%') </if>" +
+            "</script>"})
+    int findCount(Map<String, Object> map);
 
     /**
      * 分页数据
      * @param map
      * @return
      */
-    @Select("select * from customer limit #{start},#{limit}")
+    @Select({"<script>" +
+            "select * from customer " +
+            "<if test='customer.cusNo != null'>where cus_no like concat('%',#{customer.cusNo},'%') </if>" +
+            "<if test='customer.cusNo != null and customer.cusName != null'>and </if>" +
+            "<if test='customer.cusNo == null and customer.cusName!=null'>where</if>" +
+            "<if test='customer.cusName != null'>cus_name like concat('%',#{customer.cusName},'%') </if>" +
+            "limit #{start},#{limit}" +
+            "</script>"})
     List<Customer> findCustomer(Map<String, Object> map);
 
     /**
@@ -49,4 +60,15 @@ public interface CustomerMapper {
      */
     @Delete("delete from customer where cus_no = #{cusNo}")
     int deleteCustomer(int cusNo);
+
+    /**
+     * 修改客户信息
+     * @param customer
+     * @return
+     */
+    @Update("update customer set cus_name = #{cusName}, cus_region = #{cusRegion}, cus_url = #{cusUrl}, cus_level = #{cusLevel}, cus_credit = ${cusCredit} where cus_no = #{cusNo}")
+    int saveUpdateCustomer(Customer customer);
+
+    @Select("SELECT cus_region as region,COUNT(*) as total FROM customer GROUP BY cus_region")
+    List<ReportResult> countCustomerReport();
 }

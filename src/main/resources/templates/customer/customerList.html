@@ -7,15 +7,40 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" th:href="@{/layui/css/layui.css}"  media="all">
+    <script th:src="@{/layui/layui.js}" charset="utf-8"></script>
+    <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 </head>
 <body>
+<br>
+<form class="layui-form" action="">
+    <div class="layui-form-item">
 
-<table class="layui-hide" id="test" lay-filter="test"></table>
+        <div class="layui-inline">
+            <label class="layui-form-label">客户编号</label>
+            <div class="layui-input-inline">
+                <input type="text" name="cusNo" id="cusNo" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-inline">
+            <label class="layui-form-label">客户名称</label>
+            <div class="layui-input-inline">
+                <input type="text" name="cusName" id="cusName" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <button type="button" id="search" class="layui-btn">搜索</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<table class="layui-hide" id="customer" lay-filter="customer"></table>
 <script type="text/html" id="toolbarDemo">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
-        <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
-        <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
         <button class="layui-btn layui-btn-sm" lay-event="add">添加客户</button>
     </div>
 </script>
@@ -25,15 +50,37 @@
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 
-<script th:src="@{/layui/layui.js}" charset="utf-8"></script>
-<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+
 
 <script>
+
+    var row = null
+    var layer = null;
+    var table = null;
+
     layui.use(['table', 'jquery'], function(){
-        var table = layui.table;
+        table = layui.table;
         var $ = layui.jquery;
+        layer = layui.layer;
+
+        $("#search").click(function(){
+            var cusNo = $("#cusNo").val()
+            var cusName = $("#cusName").val()
+            table.reload('test', {
+                where: {
+                    cusNo: cusNo,
+                    cusName: cusName
+                } //设定异步数据接口的额外参数
+                ,page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+        })
+        //温馨提示：默认由前端自动合计当前行数据。从 layui 2.5.6 开始： 若接口直接返回了合计行数据，则优先读取接口合计行数据。
+        //详见：https://www.layui.com/doc/modules/table.html#totalRow
+
         table.render({
-            elem: '#test'
+            elem: '#customer'
             ,url:'/customer/listJson'
             ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
             ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
@@ -47,18 +94,90 @@
                 {type: 'checkbox', fixed: 'left'}
                 ,{field:'cusNo', title:'客户编号', width:100}
                 ,{field:'cusName', title:'客户名称'}
-                ,{field:'cusRegion', title:'客户区域', width:120,}
+                ,{field:'cusRegion', title:'客户区域', width:120,
+                    templet:function(row){
+                        switch(row.cusRegion){
+                            case 1:
+                                return '东北'
+                                break;
+                            case 2:
+                                return '西北'
+                                break;
+                            case 3:
+                                return '华北'
+                                break;
+                            case 4:
+                                return '华中'
+                                break;
+                            case 5:
+                                return '华南'
+                                break;
+                            case 6:
+                                return '西南'
+                                break;
+                            case 7:
+                                return '华东'
+                                break;
+                            default:
+                                return row.cusRegion;
+                                break;
+                        }
+                    }
+                }
                 ,{field:'cusUrl', title:'客户网址', width:120}
-                ,{field:'cusLevel', title:'客户等级', width: 120}
-                ,{field:'cusCredit', title:'信用等级', width:120}
-                ,{fixed: 'right', width: 165, align:'center', toolbar: '#barDemo'}
+                ,{field:'cusLevel', title:'客户等级', width: 120,
+                templet:function(row){
+                    switch(row.cusLevel){
+                        case 1:
+                            return '战略合作伙伴'
+                            break;
+                        case 2:
+                            return 'VIP客户'
+                            break;
+                        case 3:
+                            return '大客户'
+                            break;
+                        case 4:
+                            return '普通客户'
+                            break;
+                        default:
+                            return row.cusLevel;
+                            break;
+                    }
+                }
+                }
+                ,{field:'cusCredit', title:'信用等级', width:120,
+                templet:function(row){
+                    switch(row.cusCredit){
+                        case 1:
+                            return '一级'
+                            break;
+                        case 2:
+                            return '二级'
+                            break;
+                        case 3:
+                            return '三级'
+                            break;
+                        case 4:
+                            return '四级'
+                            break;
+                        case 5:
+                            return '五级'
+                            break;
+                        default:
+                            return row.cusCredit;
+                            break;
+                    }
+                }
+                }
+                ,{fixed: 'right',title: '操作' ,width: 165, align:'center', toolbar: '#barDemo'}
             ]
             ]
             ,page: true
         });
 
         //头工具栏事件
-        table.on('toolbar(test)', function(obj){
+        table.on('toolbar(customer)', function(obj){
             var checkStatus = table.checkStatus(obj.config.id);
             switch(obj.event){
                 case 'getCheckData':
@@ -89,7 +208,7 @@
         });
 
         //监听行工具事件
-        table.on('tool(test)', function(obj){
+        table.on('tool(customer)', function(obj){
             var cusNo = obj.data.cusNo;
 
             if(obj.event === 'del'){
@@ -103,24 +222,21 @@
 
                 });
             } else if(obj.event === 'edit'){
-                layer.prompt({
-                    formType: 2
-                    ,value: cusNo
-                }, function(value, index){
-                    obj.update({
-                        email: value
-                    });
-                    layer.close(index);
+                layer.open({
+                    type: 2,
+                    title:"客户修改",
+                    content:'/customer/update?cusNo=' + cusNo,
+                    area:['500px', '400px']
                 });
             }
         });
 
         //监听行双击事件
-        table.on('rowDouble(test)', function(obj){
+        table.on('rowDouble(customer)', function(obj){
             var cusNo = obj.data.cusNo;
             layer.open({
                 type: 2,
-                title:"用户详情",
+                title:"客户详情",
                 content:'/customer/detail?cusNo=' + cusNo,
                 area:['500px', '400px']
             });

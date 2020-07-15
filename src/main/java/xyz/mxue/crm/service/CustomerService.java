@@ -1,7 +1,11 @@
 package xyz.mxue.crm.service;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import xyz.mxue.crm.entity.Customer;
 import xyz.mxue.crm.model.PageResult;
+import xyz.mxue.crm.model.ReportResult;
+
+import java.util.List;
 
 public interface CustomerService {
 
@@ -11,7 +15,7 @@ public interface CustomerService {
      * @param limit
      * @return
      */
-    PageResult<Customer> findPageResult(int page, int limit);
+    PageResult<Customer> findPageResult(Customer customer,int page, int limit);
 
     /**
      * 保存用户信息
@@ -33,4 +37,16 @@ public interface CustomerService {
      * @return
      */
     Boolean deleteCustomer(int cusNo);
+
+    /**
+     * 根据 cusNo 查询客户
+     * @param cusNo
+     * @return
+     */
+    Customer getCustomerOne(int cusNo);
+
+    Boolean saveUpdateCustomer(Customer customer);
+
+
+    List<ReportResult> countCustomerReport();
 }

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" style="height: 100%">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}"  media="all">
+</head>
+<body style="height: 100%; margin: 0">
+<div id="container" style="height: 100%"></div>
+<script th:src="@{/layui/layui.js}" charset="utf-8"></script>
+<script type="text/javascript" th:src="@{/echarts/echarts.min.js}"></script>
+<script type="text/javascript">
+    var dom = document.getElementById("container");
+    var myChart = echarts.init(dom);
+    var app = {};
+    option = null;
+    var regionName = ['东北', '西北', '华北', '华中', '华南','西南', '华东'];
+
+    layui.use('jquery',function(){
+        var $ = layui.jquery
+        //向服务端发送删除指令
+        $.ajax({
+            url:'/report/countcustomerreport',
+            type:'GET',//提交方式post,get...
+            dataType:'JSON',//后台返回数据格式
+            success:function(data){
+                //执行ajax提交成功后处理代码
+                var region= []
+                var total = []
+                for(var i=0;i<data.length;i++){
+                    region[i] = regionName[data[i].region - 1];
+                    total[i] = data[i].total;
+                }
+                option = {
+                    xAxis: {
+                        type: 'category',
+                        data: region
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [{
+                        data: total,
+                        type: 'bar',
+                        barWidth:80
+                    }]
+                };
+                if (option && typeof option === "object") {
+                    myChart.setOption(option, true);
+                }
+            }
+        });
+    })
+</script>
+</body>
+</html>
