@@ -66,6 +66,21 @@
     </div>
 
     <div class="layui-form-item">
+        <label class="layui-form-label">客户来源</label>
+        <div class="layui-input-block">
+            <select name="cusSource" lay-verify='required'>
+                <option value="">请选择</option>
+                <option value="1">搜索引擎</option>
+                <option value="2">邀请</option>
+                <option value="3">电话咨询</option>
+                <option value="4">邮件咨询</option>
+                <option value="5">广告</option>
+                <option value="6">其他</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
         <div class="layui-input-block">
             <button type="submit" class="layui-btn" lay-submit="" lay-filter="submitAddCustomer">立即提交</button>
             <button type="reset" class="layui-btn layui-btn-primary">重置</button>
@@ -89,7 +104,7 @@
                     success:function(obj){
                         //执行ajax提交成功后处理代码
                         layer.msg(obj.msg,{shift:-1},function(){
-                            parent.table.reload('test')
+                            parent.table.reload('customer')
                             var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
                             //console.log(index)
                             parent.layer.close(index); //再执行关闭

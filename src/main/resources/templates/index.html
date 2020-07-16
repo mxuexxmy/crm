@@ -3,10 +3,10 @@
 <head>
     <th:block th:include="include/include :: header('CRM管理系统')"/>
 </head>
-<body class="layui-layout-body">
+<body class="layui-layout-body ">
 <div class="layui-layout layui-layout-admin">
 
-    <div class="layui-header" >
+    <div class="layui-header " >
         <div class="layui-logo">CRM系统</div>
         <!-- 头部区域（可配合layui已有的水平导航） -->
         <ul class="layui-nav layui-layout-right">
@@ -16,19 +16,20 @@
                     [[${session.user.name}]]
                 </a>
                 <dl class="layui-nav-child">
-                    <dd><a href="javascript:;">基本资料</a></dd>
-                    <dd><a href="javascript:;">安全设置</a></dd>
+                    <dd><a th:href="@{/user/profile}" target="content_iFrm">基本资料</a></dd>
+
+                    <dd><a th:href="@{/user/updatePassword}" target="content_iFrm">安全设置</a></dd>
                 </dl>
             </li>
             <li class="layui-nav-item"><a th:href="@{logout}">退出</a></li>
         </ul>
     </div>
 
-    <div class="layui-side layui-bg-black" th:fragment="nav">
+    <div class="layui-side layui-bg-black " th:fragment="nav">
         <div class="layui-side-scroll">
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
             <ul class="layui-nav layui-nav-tree"  lay-filter="test">
-                <li class="layui-nav-item layui-nav-itemed">
+                <li class="layui-nav-item">
                     <a class="" href="javascript:;">客户管理</a>
                     <dl class="layui-nav-child">
                         <dd><a th:href="@{/customer/list}" target="content_iFrm">客户基本信息</a></dd>
@@ -36,18 +37,27 @@
                     </dl>
                 </li>
                 <li class="layui-nav-item">
-                    <a href="javascript:;">营销管理</a>
+                    <a href="javascript:;">销售管理</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;">销售机会</a></dd>
-                        <dd><a href="javascript:;">发展客户</a></dd>
+                        <dd><a href="javascript:;">合同列表</a></dd>
+                        <dd><a th:href="@{/products/toproductslist}" target="content_iFrm">产品列表</a></dd>
                     </dl>
                 </li>
+
+                <li class="layui-nav-item">
+                    <a href="javascript:;">业绩分析</a>
+                    <dl class="layui-nav-child">
+                        <dd><a th:href="@{/ConNumberController/tonumberanalyze}" target="content_iFrm">合同数量分析</a></dd>
+                        <dd><a th:href="@{/ConNumberController/toconamount}" target="content_iFrm">合同金额分析</a></dd>
+                    </dl>
+                </li>
+
                 <li class="layui-nav-item">
                     <a href="javascript:;">统计报表</a>
                     <dl class="layui-nav-child">
                         <dd><a th:href="@{report/countcustomer}" target="content_iFrm">按区域统计客户数量</a></dd>
-                        <dd><a href="javascript:;">客户联系人</a></dd>
-                        <dd><a href="javascript:;">客户流失管理</a></dd>
+                        <dd><a th:href="@{report/sourcecustomer}" target="content_iFrm">客户来源</a></dd>
+                        <dd><a th:href="@{report/creditcustomer}" target="content_iFrm">信用等级分析</a></dd>
                     </dl>
                 </li>
             </ul>

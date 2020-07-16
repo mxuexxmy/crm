@@ -2,6 +2,8 @@ package xyz.mxue.crm.mapper;
 
 import org.apache.ibatis.annotations.*;
 import xyz.mxue.crm.entity.Customer;
+import xyz.mxue.crm.model.BaseCredit;
+import xyz.mxue.crm.model.BaseSource;
 import xyz.mxue.crm.model.ReportResult;
 
 import java.util.List;
@@ -71,4 +73,13 @@ public interface CustomerMapper {
 
     @Select("SELECT cus_region as region,COUNT(*) as total FROM customer GROUP BY cus_region")
     List<ReportResult> countCustomerReport();
+
+    @Select("SELECT * FROM customer")
+    List<Customer> customerList();
+
+    @Select("SELECT cus_source as name , COUNT(*) as value FROM customer  GROUP BY  cus_source")
+    List<BaseSource> findSourceResult();
+
+    @Select("SELECT cus_credit as name , COUNT(*) as value FROM customer  GROUP BY  cus_credit")
+    List<BaseCredit> findSCreditResult();
 }

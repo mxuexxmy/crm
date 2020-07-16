@@ -66,7 +66,7 @@
         $("#search").click(function(){
             var cusNo = $("#cusNo").val()
             var cusName = $("#cusName").val()
-            table.reload('test', {
+            table.reload('customer', {
                 where: {
                     cusNo: cusNo,
                     cusName: cusName
@@ -170,6 +170,33 @@
                     }
                 }
                 }
+                ,{field: 'cusSource',title: '客户来源' ,
+                  templet:function (row) {
+                    switch (row.cusSource) {
+                       case 1:
+                           return '搜索引擎';
+                               break;
+                        case 2:
+                            return '邀请';
+                            break;
+                        case 3:
+                            return '电话咨询';
+                            break;
+                        case 4:
+                            return '邮件咨询';
+                            break;
+                        case 5:
+                            return '广告';
+                            break;
+                        case 6:
+                            return '其他';
+                            break;
+                        default:
+                            return row.cusSource;
+                            break;
+                    }
+                  }
+                }
                 ,{fixed: 'right',title: '操作' ,width: 165, align:'center', toolbar: '#barDemo'}
             ]
             ]
@@ -180,18 +207,6 @@
         table.on('toolbar(customer)', function(obj){
             var checkStatus = table.checkStatus(obj.config.id);
             switch(obj.event){
-                case 'getCheckData':
-                    var data = checkStatus.data;
-                    layer.alert(JSON.stringify(data));
-                    break;
-                case 'getCheckLength':
-                    var data = checkStatus.data;
-                    layer.msg('选中了：'+ data.length + ' 个');
-                    break;
-                case 'isAll':
-                    layer.msg(checkStatus.isAll ? '全选': '未全选');
-                    break;
-
                 case 'add' :
                     layer.open({
                        type: 2,
@@ -219,7 +234,6 @@
                         url: "/customer/delete?cusNo=" + cusNo,
                         type: 'get',
                     });
-
                 });
             } else if(obj.event === 'edit'){
                 layer.open({

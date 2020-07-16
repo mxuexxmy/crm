@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import xyz.mxue.crm.entity.Customer;
 import xyz.mxue.crm.mapper.CustomerMapper;
-import xyz.mxue.crm.model.PageResult;
-import xyz.mxue.crm.model.ReportResult;
+import xyz.mxue.crm.model.*;
 import xyz.mxue.crm.service.CustomerService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,6 +82,45 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public List<ReportResult> countCustomerReport() {
         return customerMapper.countCustomerReport();
+    }
+
+    @Override
+    public List<Customer> customerList() {
+        return customerMapper.customerList();
+    }
+
+    @Override
+    public List<SourceResult> SourceCustomerReport() {
+        List<SourceResult> results = new ArrayList<>();
+        List<BaseSource> sources = customerMapper.findSourceResult();;
+
+        String [] sourceName = {"搜索引擎", "邀请", "电话咨询", "邮件咨询", "广告", "其他"};
+
+        for (BaseSource source : sources) {
+            SourceResult sourceResult = new SourceResult();
+            sourceResult.setValue(source.getValue());
+            sourceResult.setName(sourceName[source.getName() - 1]);
+            results.add(sourceResult);
+        }
+
+        return results;
+    }
+
+    @Override
+    public List<CreditResult> CreditCustomerReport() {
+        List<CreditResult> results = new ArrayList<>();
+        List<BaseCredit> credits = customerMapper.findSCreditResult();;
+
+        String [] creditName = {"一级", "二级", "三级", "四级", "五级"};
+
+        for (BaseCredit credit : credits) {
+            CreditResult creditResult = new CreditResult();
+            creditResult.setValue(credit.getValue());
+            creditResult.setName(creditName[credit.getName() - 1]);
+            results.add(creditResult);
+        }
+
+        return results;
     }
 
 }

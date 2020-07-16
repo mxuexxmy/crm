@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" style="height: 100%">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}"  media="all">
+</head>
+<body style="height: 100%; margin: 0">
+<div id="container" style="height: 100%"></div>
+<script th:src="@{/layui/layui.js}" charset="utf-8"></script>
+<script type="text/javascript" th:src="@{/echarts/echarts.min.js}"></script>
+
+<script type="text/javascript">
+
+    layui.use('jquery',function () {
+        var $ = layui.jquery
+
+        $.ajax({
+            url:"/ConNumberController/numberanalyze",//规定异步提交的路径
+            type:"GET",//提交方式
+            dataType:"json", //规定后台返回给浏览器的数据格式
+            success:function (result) {
+                var  date = []
+                var  number = []
+
+                for (let i = 0;i<result.length;i++) {
+                    date[i] = result[i].date
+                    number[i] = result[i].number
+                }
+
+                var dom = document.getElementById("container");
+                var myChart = echarts.init(dom);
+                var app = {};
+                option = null;
+                option = {
+                    xAxis: {
+                        type: 'category',
+                        data: date
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [{
+                        data: number,
+                        type: 'line',
+                        color:['#00BFFF', '#FFFF00', '#00FA9A', '#8A2BE2', '#FFA07A'],
+                        smooth: true
+                    }]
+                };
+                ;
+                if (option && typeof option === "object") {
+                    myChart.setOption(option, true);
+                }
+
+
+            }
+
+        })
+
+    })
+
+
+</script>
+</body>
+</html>

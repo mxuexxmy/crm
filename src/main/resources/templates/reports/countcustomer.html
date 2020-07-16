@@ -31,6 +31,10 @@
                     total[i] = data[i].total;
                 }
                 option = {
+                    title: {
+                        text: '区域客户数量',
+                        left: 'center'
+                    },
                     xAxis: {
                         type: 'category',
                         data: region
@@ -41,7 +45,8 @@
                     series: [{
                         data: total,
                         type: 'bar',
-                        barWidth:80
+                        barWidth:80,
+                        color: 'rgba(0,191,255)'
                     }]
                 };
                 if (option && typeof option === "object") {

@@ -6,13 +6,9 @@ import lombok.Data;
 public class Customer {
     private Integer cusNo;
     private String cusName;
-
-    /**
-     * 客户区域：
-     */
     private Integer cusRegion;
-
     private String cusUrl;
     private Integer cusLevel;
     private Integer cusCredit;
+    private Integer cusSource;
 }

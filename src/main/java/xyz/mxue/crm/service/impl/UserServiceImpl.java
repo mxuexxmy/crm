@@ -24,4 +24,23 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
+
+    @Override
+    public User findEmail(String email) {
+        return userMapper.findEmail(email);
+    }
+
+    @Override
+    public Boolean saveResetPassword(String email,  String newPassword) {
+        newPassword = DigestUtils.md5DigestAsHex(newPassword.getBytes());
+        userMapper.resetPassword(email, newPassword);
+        return null;
+    }
+
+    @Override
+    public void saveUpdatePassword(User user) {
+        int id = Math.toIntExact(user.getId());
+        String password = DigestUtils.md5DigestAsHex(user.getPassword().getBytes());
+        userMapper.saveUpdatePassword(id, password);
+    }
 }

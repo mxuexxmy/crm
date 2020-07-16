@@ -52,10 +52,12 @@ public class CustomerController {
 
     @RequestMapping(value = "delete", method = RequestMethod.GET)
     @ResponseBody
-    public String deleteCustomer(int cusNo) {
+    public CRUDResult deleteCustomer(int cusNo) {
+        CRUDResult result = new CRUDResult();
+        result.setSuccess(0);
         customerService.deleteCustomer(cusNo);
-        System.out.println(cusNo);
-        return "";
+        result.setMsg("删除客户成功");
+        return result;
     }
 
     /**
@@ -82,6 +84,7 @@ public class CustomerController {
         }
         return result;
     }
+
     /**
      * 客户详情
      * @param map

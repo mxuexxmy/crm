@@ -17,7 +17,7 @@
         <div class="layui-inline">
             <label class="layui-form-label">客户姓名</label>
             <div class="layui-input-inline">
-                <input type="text" name="cusNo" id="cusNo" autocomplete="off" class="layui-input">
+                <input type="text" name="ctName" id="ctName" autocomplete="off" class="layui-input">
             </div>
         </div>
 
@@ -58,6 +58,17 @@
         var  $ = layui.jquery;
         layer = layui.layer;
 
+        $("#search").click(function(){
+            var ctName = $("#ctName").val()
+            table.reload('contact', {
+                where: {
+                    ctName: ctName,
+                } //设定异步数据接口的额外参数
+                ,page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+        });
         table.render({
             elem: '#contact'
             ,url:'/contact/listJson'
@@ -93,16 +104,35 @@
             ,page: true
         });
 
+        //头工具栏事件
+        table.on('toolbar(contact)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch(obj.event){
+                case 'add' :
+                    layer.open({
+                        type: 2,
+                        title:"新增联系人信息",
+                        content:'/contact/add',
+                        area:['500px', '500px']
+                    });
+                    break;
+                //自定义头工具栏右侧图标 - 提示
+                case 'LAYTABLE_TIPS':
+                    layer.alert('这是工具栏右侧自定义的一个图标按钮');
+                    break;
+            };
+        });
+
         //监听行工具事件
         table.on('tool(contact)', function(obj){
+            var ctId = obj.data.ctId;
             var cusNo = obj.data.cusNo;
-
             if(obj.event === 'del'){
                 layer.confirm('确认删除客户信息？', function(index){
                     obj.del();
                     layer.close(index);
                     $.ajax({
-                        url: "/customer/delete?cusNo=" + cusNo,
+                        url: "/contact/delete?ctId=" + ctId,
                         type: 'get',
                     });
 
@@ -110,9 +140,9 @@
             } else if(obj.event === 'edit'){
                 layer.open({
                     type: 2,
-                    title:"客户修改",
-                    content:'/customer/update?cusNo=' + cusNo,
-                    area:['500px', '400px']
+                    title:"联系人修改",
+                    content:'/contact/update?ctId=' + ctId,
+                    area:['800px', '500px']
                 });
             } else if (obj.event === 'detail') {
                 var cusNo = obj.data.cusNo;
@@ -123,6 +153,17 @@
                     area:['500px', '400px']
                 });
             }
+        });
+
+        //监听行双击事件
+        table.on('rowDouble(contact)', function(obj){
+            var ctId = obj.data.ctId;
+            layer.open({
+                type: 2,
+                title:"客户详情",
+                content:'/contact/detail?ctId=' + ctId,
+                area:['500px', '400px']
+            });
         });
 
     });

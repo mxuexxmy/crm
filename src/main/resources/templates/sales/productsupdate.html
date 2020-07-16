@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}"  media="all">
+    <script th:src="@{/layui/layui.js}" charset="utf-8"></script>
+</head>
+<body>
+
+<form class="layui-form" method="post"  lay-filter="test1">
+
+    <input type="hidden" name="proN0" th:value="${products.proN0}">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">商品名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="proName" th:value="${products.proName}"  lay-verify="required" autocomplete="off"  class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">商品价格</label>
+        <div class="layui-input-block">
+            <input type="text" name="proPrice" th:value="${products.proPrice}"  lay-verify="required" autocomplete="off"  class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">是否上架</label>
+        <div class="layui-input-block">
+            <select name="proShelves" id="proShelves" lay-filter="required">
+                <option value="1" >上架</option>
+                <option value="0">下降</option>
+            </select>
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">是否上架</label>
+        <div class="layui-input-block">
+            <select name="proGenre" id="proGenre" lay-filter="required">
+                <option value="0">手机</option>
+                <option value="1">平板电脑</option>
+                <option value="2">笔记本电脑</option>
+                <option value="3">空调</option>
+                <option value="4">耳机</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">商品数量</label>
+        <div class="layui-input-block">
+            <input type="text" name="proNumber" th:value="${products.proNumber}"  lay-verify="required" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="submit" class="layui-btn" lay-submit="" lay-filter="submitupdateproducts">立即提交</button>
+        </div>
+    </div>
+
+</form>
+
+<script>
+
+    layui.use(['form', 'jquery'], function(){
+        var form = layui.form
+        var  $ = layui.jquery
+        //监听提交
+        form.on('submit(submitupdateproducts)', function(data){
+            if (form.verify()){
+                $.ajax({
+                    url:"/products/productsupdate",//规定异步提交的路径
+                    type:"POST",//提交方式
+                    data:data.field,//提交给后台的数据
+                    dataType:"json", //规定后台返回给浏览器的数据格式
+                    success:function (result) {
+                        layer.msg( result.msg,{shift:-1},function () {
+                            parent.table.reload("test");
+                            //假设这是iframe页
+                            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                            parent.layer.close(index); //再执行关闭
+                        })
+                    }
+
+                })
+
+            }
+
+            return false;  //防止form提交刷新//
+        });
+
+        var  proShelvesOption = [[${products.proShelves}]]
+        var select = 'dd[lay-value='+proShelvesOption+']'
+        $("#proShelves").siblings("div.layui-form-select").find('dl').find(select).click()
+
+        var  proGenreOption = [[${products.proGenre}]]
+        var select = 'dd[lay-value='+proGenreOption+']'
+        $("#proGenre").siblings("div.layui-form-select").find('dl').find(select).click()
+
+
+
+    });
+
+
+
+</script>
+
+</body>
+</html>

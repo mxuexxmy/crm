@@ -2,8 +2,10 @@ package xyz.mxue.crm.service;
 
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import xyz.mxue.crm.entity.Customer;
+import xyz.mxue.crm.model.CreditResult;
 import xyz.mxue.crm.model.PageResult;
 import xyz.mxue.crm.model.ReportResult;
+import xyz.mxue.crm.model.SourceResult;
 
 import java.util.List;
 
@@ -49,4 +51,10 @@ public interface CustomerService {
 
 
     List<ReportResult> countCustomerReport();
+
+    List<Customer> customerList();
+
+    List<SourceResult> SourceCustomerReport();
+
+    List<CreditResult> CreditCustomerReport();
 }
