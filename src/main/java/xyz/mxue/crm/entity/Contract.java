@@ -6,11 +6,11 @@ import java.util.Date;
 
 @Data
 public class Contract {
-    private long conNo;
+    private Integer conNo;
     private String conName;
-    private long cusNo;
+    private Integer cusNo;
     private double conAmount;
     private Date conCreate;
-    private long ctId;
+    private Integer ctId;
     private String conNotes;
 }

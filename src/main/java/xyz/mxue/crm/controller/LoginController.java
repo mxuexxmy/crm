@@ -80,7 +80,6 @@ public class LoginController {
 
     @RequestMapping(value = "saveResetPaddword", method = RequestMethod.POST)
     public String saveResetPassword(ModelMap map, User user, String newCode, String newPassword, HttpServletRequest request) {
-        System.out.println(user.getEmail() + "-" + newCode + " " + newPassword );
         if (newCode.equals(request.getSession().getAttribute("code"))){
             userService.saveResetPassword(user.getEmail(), newPassword);
             map.addAttribute("message", "重置密码成功");

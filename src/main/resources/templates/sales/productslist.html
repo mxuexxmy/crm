@@ -113,7 +113,7 @@
             //console.log(obj)
             if(obj.event === 'del'){
 
-                layer.confirm('真的删除行么', function(index){
+                layer.confirm('删除产品信息', function(index){
                     $.ajax({
                         url:"/products/productsdelete",//规定异步提交的路径
                         type:"POST",//提交方式
@@ -132,7 +132,7 @@
             } else if(obj.event === 'edit'){
                 layer.open({
                     type:2,
-                    title:"新增客户信息",
+                    title:"修改产品信息",
                     content:'/products/toproductsupdate?proN0='+obj.data.proN0,
                     area:['400px','400px'],
                 })
@@ -146,7 +146,7 @@
 
             layer.open({
                 type:2,
-                title:"客户详情",
+                title:"产品详情",
                 content:'/products/toproductsdetail?proN0='+obj.data.proN0,
                 area:['400px','400px'],
             })
